@@ -39,6 +39,16 @@
         <h1>DeepRecursion</h1>
     </header>
     
+    <nav>
+        <ul>
+            <% if session.user %>
+            <li><a href="<% links.login %>">Logout</a></li>            
+            <% else %>
+            <li><a href="<% links.login %>">Login</a></li>
+            <li><a href="<% links.login %>">Register</a></li>
+            <% end %>
+    </nav>
+    
     <div id="main" role="main">
         <% content %>
     </div>
