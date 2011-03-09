@@ -24,7 +24,7 @@
 
 
   <!-- CSS : implied media="all" -->
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="/css/style.css?v=2">
   <link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">
  
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
@@ -36,25 +36,21 @@
 
   <div id="container">
     <header>
-        <h1>DeepRecursion</h1>
+        <h1><a href="<% links.home %>">DeepRecursion</a></h1>
+        <ul>
+            <% if links.logout %><li><a href="<% links.logout %>">Logout</a></li><% end %>
+            <% if links.login %><li><a href="<% links.login %>">Login</a></li><% end %>            
+            <% if links.register %><li><a href="<% links.register %>">Register</a></li><% end %>            
+        </ul>
     </header>
     
-    <nav>
-        <ul>
-            <% if session.user %>
-            <li><a href="<% links.login %>">Logout</a></li>            
-            <% else %>
-            <li><a href="<% links.login %>">Login</a></li>
-            <li><a href="<% links.login %>">Register</a></li>
-            <% end %>
-    </nav>
     
     <div id="main" role="main">
         <% content %>
     </div>
     
     <footer>
-        
+        <p>Based on <a href="<% links.deep_recursion %>">DeepRecursion</a> by Tamarou LLC. Copyright &copy; 2011, Some Rights Reserved.</p>
     </footer>
   </div> <!--! end of #container -->
 

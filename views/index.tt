@@ -1,0 +1,12 @@
+<h2>Questions</h2>
+<% if questions %>
+    <% for question in questions %>
+    <article>
+        <div class="votes count"><p><% question.votes_count %></p><label>Votes</label></div>
+        <div class="answers count"><p><% question.answers_count %></p><label>Answers</label></div>
+        <h3><a href="/question/<% question.id %>"><% question.title %></a></h3>
+    </article>
+    <% end %>
+<% else %>
+    <p>There have been no questions asked yet.</p>
+<% end %>

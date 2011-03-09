@@ -3,9 +3,10 @@ use 5.12.1;
 use Dancer ':syntax';
 use Dancer::Plugin;
 
-my $links = {};
+my $links;
 
 register links => sub {
+    $links = plugin_setting();
     given ( scalar @_ ) {
         when (0) { return $links }
         when (1) {

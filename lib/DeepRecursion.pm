@@ -5,8 +5,34 @@ use Dancer ':syntax';
 use Dancer::Plugin::KiokuDB;
 use Dancer::Plugin::Links;
 
+use DeepRecursion::Question;
+use DeepRecursion::Answer;
 
-get '/' => sub {
+sub get_question {
+    DeepRecursion::Question->new(
+        title => 'Lorem ipsum dolor?',
+        text =>
+'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        answers => [
+            DeepRecursion::Answer->new(
+                text =>
+'Lorem ipsum dolor sit amet, __consectetur__ adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            )
+        ],
+    );
+}
+
+before sub {
     if ( session->{user} ) {
         links logout => uri_for('/logout');
     }
@@ -14,7 +40,14 @@ get '/' => sub {
         links login    => uri_for('/login');
         links register => uri_for('/register');
     }
-    template 'index';
+};
+
+get '/' => sub {
+    template 'index' => { questions => [ map { get_question() } ( 1 .. 5 ) ] };
+};
+
+get '/question/:id' => sub {
+    template 'question' => { question => get_question() };
 };
 
 any [ 'get', 'post' ] => '/logout' => sub {
@@ -23,8 +56,9 @@ any [ 'get', 'post' ] => '/logout' => sub {
 };
 
 any [ 'get', 'post' ] => '/login' => sub {
-    links login => uri_for('/login');
-    return template 'login' unless request->method() eq 'POST';
+    links login    => uri_for('/login');
+    links register => uri_for('/register');
+    return template 'login', {} unless request->method() eq 'POST';
 
     try {
         my $k     = kiokudb();
@@ -42,8 +76,9 @@ any [ 'get', 'post' ] => '/login' => sub {
 };
 
 any [ 'get', 'post' ] => '/register' => sub {
+    links login    => uri_for('/login');
     links register => uri_for('/register');
-    return template 'register' unless request->method() eq 'POST';
+    return template 'register', {} unless request->method() eq 'POST';
 
     try {
         my $k     = kiokudb();
