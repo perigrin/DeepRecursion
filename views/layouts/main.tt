@@ -38,9 +38,12 @@
     <header>
         <h1><a href="<% links.home %>">DeepRecursion</a></h1>
         <ul>
-            <% if links.logout %><li><a href="<% links.logout %>">Logout</a></li><% end %>
-            <% if links.login %><li><a href="<% links.login %>">Login</a></li><% end %>            
-            <% if links.register %><li><a href="<% links.register %>">Register</a></li><% end %>            
+            <% if session.user %>
+                <li><a href="<% links.logout %>">Logout</a></li>
+            <% else %>
+                <li><a href="<% links.login %>">Login</a></li>
+                <li><a href="<% links.register %>">Register</a></li>
+            <% end %>
         </ul>
     </header>
     

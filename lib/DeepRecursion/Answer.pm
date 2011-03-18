@@ -1,6 +1,6 @@
 package DeepRecursion::Answer;
 use Moose;
-
+use DateTime;
 has id => (
     isa     => 'Str',
     is      => 'ro',
@@ -10,6 +10,12 @@ has id => (
 
 has text => (
     isa      => 'Str',
+    is       => 'ro',
+    required => 1,
+);
+
+has author => (
+    isa      => 'DeepRecursion::User',
     is       => 'ro',
     required => 1,
 );
@@ -24,11 +30,11 @@ has votes => (
     }
 );
 
-# has author => (
-#     isa      => 'DeepRecursion::User',
-#     is       => 'ro',
-#     required => 1,
-# );
+has timestamp => (
+    isa     => 'DateTime',
+    is      => 'ro',
+    default => sub { DateTime->now }
+);
 
 1;
 __END__

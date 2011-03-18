@@ -3,6 +3,7 @@
     <div class="votes count"><p><% question.votes_count %></p><label>Votes</label></div>
     <h2><% question.title %></h2>    
     <div class="text"><% FILTER markdown %><% question.text %><%END%></div>
+    <p>Posted by <% question.author.id %> on <% question.timestamp %>.</p>    
 </article>
 <div class="answers">
 <h2><% question.answers_count %> Answers</h2>
@@ -10,6 +11,16 @@
 <article class="answer">
     <div class="votes count"><p><% answer.votes_count %></p><label>Votes</label></div>
     <div class="text"><% FILTER markdown %><% answer.text %><%END%></div>
+    <p>Posted by <% answer.author.id %> on <% answer.timestamp %>.</p>    
 </article>
+<% end %>
+<% if session.user %>
+<div class="add answer" style="border-top: 1px solid silver;">
+    <p>Add another answer.</p>
+    <form method="POST" action="<% links.new_answer %>" class="login">
+        <div class="input"><textarea name="text"></textarea></div>
+        <div class="input" ><input type="submit" name="Post Your Answer" ></div>
+    </form>
+</div>    
 <% end %>
 </div>

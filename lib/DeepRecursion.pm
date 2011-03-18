@@ -2,35 +2,15 @@ package DeepRecursion;
 use Dancer ':syntax';
 
 # ABSTRACT: My private dancer girl, my private dancer girl...
+use Try::Tiny;
+use KiokuX::User::Util qw(crypt_password);
+
 use Dancer::Plugin::KiokuDB;
 use Dancer::Plugin::Links;
 
+use DeepRecursion::User;
 use DeepRecursion::Question;
 use DeepRecursion::Answer;
-
-sub get_question {
-    DeepRecursion::Question->new(
-        title => 'Lorem ipsum dolor?',
-        text =>
-'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        answers => [
-            DeepRecursion::Answer->new(
-                text =>
-'Lorem ipsum dolor sit amet, __consectetur__ adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            )
-        ],
-    );
-}
 
 before sub {
     if ( session->{user} ) {
@@ -40,14 +20,59 @@ before sub {
         links login    => uri_for('/login');
         links register => uri_for('/register');
     }
+    links new_question => uri_for('/question/new');
 };
 
 get '/' => sub {
-    template 'index' => { questions => [ map { get_question() } ( 1 .. 5 ) ] };
+    my $dir       = kiokudb;
+    my $scope     = $dir->new_scope;
+    my $questions = $dir->search( { class => 'DeepRecursion::Question' } );
+    template 'index' => { questions => $questions };
+};
+
+any [ 'get', 'post' ] => '/question/new' => sub {
+    return redirect uri_for('/login') unless session->{user};
+    return template 'new_question', {} unless request->method() eq 'POST';
+    try {
+        my $dir      = kiokudb();
+        my $scope    = $dir->new_scope;
+        my $user     = $dir->lookup( 'user:' . session->{user}->id );
+        my $question = DeepRecursion::Question->new(
+            author => $user,
+            title  => params->{title},
+            text   => params->{text},
+        );
+        $dir->store($question);
+        redirect uri_for("/question/${\$question->id}");
+    }
+    catch {
+        debug $_;
+        template 'new_question' => { error => $_ };
+    }
+};
+
+post '/question/:id/answer' => sub {
+    return redirect uri_for('/login') unless session->{user};
+    my $dir      = kiokudb;
+    my $scope    = $dir->new_scope;
+    my $question = $dir->lookup( params->{id} );
+    my $user     = $dir->lookup( 'user:' . session->{user}->id );
+
+    my $answer = DeepRecursion::Answer->new(
+        author => $user,
+        text   => params->{text},
+    );
+    $question->add_answer($answer);
+    $dir->store($question);
+    redirect uri_for("/question/${\params->{id}}");
 };
 
 get '/question/:id' => sub {
-    template 'question' => { question => get_question() };
+    my $dir      = kiokudb;
+    my $scope    = $dir->new_scope;
+    my $question = $dir->lookup( params->{id} );
+    links new_answer => uri_for("/question/${\params->{id}}/answer");
+    template 'question' => { question => $question };
 };
 
 any [ 'get', 'post' ] => '/logout' => sub {
@@ -56,14 +81,12 @@ any [ 'get', 'post' ] => '/logout' => sub {
 };
 
 any [ 'get', 'post' ] => '/login' => sub {
-    links login    => uri_for('/login');
-    links register => uri_for('/register');
     return template 'login', {} unless request->method() eq 'POST';
 
     try {
-        my $k     = kiokudb();
-        my $scope = $k->new_scope;
-        my $user  = $k->lookup( 'user:' . params->{username} )
+        my $dir   = kiokudb();
+        my $scope = $dir->new_scope;
+        my $user  = $dir->lookup( 'user:' . params->{username} )
           or die 'Invalid username';
         $user->check_password( params->{password} )
           or die "Invalid password";
@@ -76,24 +99,22 @@ any [ 'get', 'post' ] => '/login' => sub {
 };
 
 any [ 'get', 'post' ] => '/register' => sub {
-    links login    => uri_for('/login');
-    links register => uri_for('/register');
     return template 'register', {} unless request->method() eq 'POST';
 
     try {
-        my $k     = kiokudb();
-        my $scope = $k->new_scope;
+        my $dir   = kiokudb();
+        my $scope = $dir->new_scope;
 
         die 'password mismatch'
           unless params->{password} eq params->{confirm};
-        debug "adding ${\params->{username}} => ${\params->{password}}";
-        my $user = PerlStarter::User->new(
+
+        my $user = DeepRecursion::User->new(
             id       => params->{username},
             password => crypt_password( params->{password} ),
         );
-        $k->store($user);
-        session user => $k->lookup( $user->kiokudb_object_id );
-        redirect params->{next_resource} || '/';
+        $dir->store($user);
+        session user => $dir->lookup( $user->kiokudb_object_id );
+        redirect uri_for('/');
     }
     catch {
         template 'register', { error => $_ };
