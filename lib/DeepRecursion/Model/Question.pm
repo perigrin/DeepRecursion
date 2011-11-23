@@ -1,4 +1,4 @@
-package DeepRecursion::Question;
+package DeepRecursion::Model::Question;
 use Moose;
 use Digest::SHA qw(sha1_hex);
 use DateTime;
@@ -26,13 +26,13 @@ has text => (
 );
 
 has author => (
-    isa      => 'DeepRecursion::User',
+    isa      => 'DeepRecursion::Model::User',
     is       => 'ro',
     required => 1,
 );
 
 has votes => (
-    isa     => 'ArrayRef[DeepRecursion::User]',
+    isa     => 'ArrayRef[DeepRecursion::Model::User]',
     default => sub { [] },
     traits  => ['Array'],
     handles => {
@@ -42,7 +42,7 @@ has votes => (
 );
 
 has answers => (
-    isa     => 'ArrayRef[DeepRecursion::Answer]',
+    isa     => 'ArrayRef[DeepRecursion::Model::Answer]',
     default => sub { [] },
     traits  => ['Array'],
     handles => {

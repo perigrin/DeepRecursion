@@ -1,4 +1,4 @@
-package DeepRecursion::User;
+package DeepRecursion::Model::User;
 use Moose;
 use DateTime;
 

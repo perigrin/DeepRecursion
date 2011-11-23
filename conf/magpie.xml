@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<application>
+    <accept_matrix>
+        <variant name="html" type="text/html"/>
+    </accept_matrix>
+    <pipeline>
+        <match type="regexp" rule="^/user">
+            <add class="DeepRecursion::Resource::User"/>
+        </match>
+        <match type="regexp" rule="^/question">
+            <add class="DeepRecursion::Resource::Questions"/>
+        </match>
+        <match type="regexp" rule=".*">
+            <add class="Magpie::Resource::Abstract"/>
+        </match>
+        <match type="accept" variant_name="html">
+            <add class="DeepRecursion::Transformer::TT2">
+                <parameters>
+                    <template_path>views</template_path>
+                </parameters>
+            </add>
+        </match>
+    </pipeline>
+</application>

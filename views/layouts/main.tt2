@@ -36,24 +36,20 @@
 
   <div id="container">
     <header>
-        <h1><a href="<% links.home %>">DeepRecursion</a></h1>
+        <h1><a href="/">DeepRecursion</a></h1>
         <ul>
-            <% if session.user %>
-                <li><a href="<% links.logout %>">Logout</a></li>
-            <% else %>
-                <li><a href="<% links.login %>">Login</a></li>
-                <li><a href="<% links.register %>">Register</a></li>
-            <% end %>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
         </ul>
     </header>
     
     
     <div id="main" role="main">
-        <% content %>
+        [% content %]
     </div>
     
     <footer>
-        <p>Based on <a href="<% links.deep_recursion %>">DeepRecursion</a> by Tamarou LLC. Copyright &copy; 2011, Some Rights Reserved.</p>
+        <p>Based on <a href="https://github.com/perigrin/DeepRecursion">DeepRecursion</a> by <a href="http://tamarou.com">Tamarou LLC</a>. Copyright &copy; 2011, Some Rights Reserved.</p>
     </footer>
   </div> <!--! end of #container -->
 
