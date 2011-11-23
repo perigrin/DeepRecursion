@@ -9,19 +9,7 @@ use Bread::Board;
 use Plack::Builder;
 use Plack::Middleware::Magpie;
 
-has kioku_dsn => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
-
-has kioku_user => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
-
-has kioku_pass => (
+has [qw(kioku_dsn kioku_user kioku_pass)] => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
@@ -58,10 +46,10 @@ sub app {
     builder {
         enable "Plack::Middleware::Static",
             path => qr{(?:^/(?:images|js|css)/|\.(?:txt|html|xml|ico)$)},
-            root => "$FindBin::Bin/root/static";
+            root => 'root/static';
         enable "Magpie",
             assets => $self->assets,
-            conf   => "$FindBin::Bin/conf/magpie.xml";
+            conf   => 'conf/magpie.xml';
     };
 }
 

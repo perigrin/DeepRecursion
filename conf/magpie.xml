@@ -14,6 +14,10 @@
         <match type="regexp" rule="^/(?!question|user).*">
             <add class="Magpie::Resource::Abstract"/>
         </match>
+        <match type="accept" variant_name="json">
+            <add class="DeepRecursion::Transformer::JSON">
+            </add>
+        </match>
         <match type="accept" variant_name="html">
             <add class="DeepRecursion::Transformer::TT2">
                 <parameters>
@@ -21,9 +25,6 @@
                 </parameters>
             </add>
         </match>
-        <match type="accept" variant_name="json">
-            <add class="DeepRecursion::Transformer::JSON">
-            </add>
-        </match>
+
     </pipeline>
 </application>
