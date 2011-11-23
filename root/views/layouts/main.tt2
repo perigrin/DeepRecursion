@@ -38,8 +38,12 @@
     <header>
         <h1><a href="/">DeepRecursion</a></h1>
         <ul>
+            [% IF session.keys %]
+                <li><a href="/login?logout=1">Logout</a></li>
+            [% ELSE %]
                 <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
+                <li><a href="/register">Register</a></li>                
+            [% END %]
         </ul>
     </header>
     

@@ -1,5 +1,10 @@
 [% WRAPPER layouts/main.tt2 %]
+[% user = session.get('user')%]
+[% IF user %]
+<h2>Hey there [% user.id %]!</h2>
+[% ELSE %]
 <h2>Questions</h2>
+[% END %]
 You can always <a href="/new_question">ask a question</a>.
 
 [% END %]

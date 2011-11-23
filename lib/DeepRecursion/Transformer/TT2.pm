@@ -1,7 +1,9 @@
 package DeepRecursion::Transformer::TT2;
 use Moose;
 extends qw(Magpie::Transformer::TT2);
+
 use Magpie::Constants;
+use Plack::Session;
 
 sub get_tt_conf {
     shift->tt_conf(
@@ -16,9 +18,7 @@ sub get_tt_conf {
 sub get_template {
     my $self = shift;
     my $ctxt = shift;
-
     return DECLINED if $self->parent_handler->has_error;
-
     $self->response->content_type('text/html');
 
     ( my $file = $self->request->path_info ) =~ s|^/||;
@@ -38,27 +38,28 @@ sub get_template {
 
     $self->template_file($template);
     return OK;
+
 }
 
 sub get_tt_vars {
-    my $self = shift;
-    my $ctxt = shift;
+    my $self  = shift;
+    my $ctxt  = shift;
     my %clone = %{$ctxt};
     for ( $self->request->param ) {
         $clone{$_} = $self->request->param($_);
     }
 
     my $vars = {
-        request => $self->request,
+        request  => $self->request,
         response => $self->response,
         resource => $self->resource,
-        context => \%clone,
+        session  => Plack::Session->new( $self->request->env ),
+        context  => \%clone,
     };
 
     $self->tt_vars($vars);
     return OK;
 }
-
 
 1;
 __END__

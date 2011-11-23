@@ -5,13 +5,16 @@
         <variant name="html" type="text/html"/>
     </accept_matrix>
     <pipeline>
+        <match type="regexp" rule="^/login">
+            <add class="DeepRecursion::Resource::Session"/>
+        </match>
         <match type="regexp" rule="^/user">
             <add class="DeepRecursion::Resource::User"/>
         </match>
         <match type="regexp" rule="^/question">
             <add class="DeepRecursion::Resource::Questions"/>
         </match>
-        <match type="regexp" rule="^/(?!question|user).*">
+        <match type="regexp" rule="^/(?!question|user|login).*">
             <add class="Magpie::Resource::Abstract"/>
         </match>
         <match type="accept" variant_name="json">
@@ -25,6 +28,5 @@
                 </parameters>
             </add>
         </match>
-
     </pipeline>
 </application>
