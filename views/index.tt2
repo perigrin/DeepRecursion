@@ -1,4 +1,0 @@
-[% WRAPPER layouts/main.tt2 %]
-<h2>Questions</h2>
-You can always <a href="[% links.new_question %]">ask a question</a>.
-[% END %]

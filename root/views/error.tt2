@@ -1,0 +1,5 @@
+[% WRAPPER layouts/main.tt2 %]
+<h2>There has been a disturbance in the force.</h2>
+<p>Something terrible has happened. Worse yet, I've no clue what.</p>
+
+[% END %]

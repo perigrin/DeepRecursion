@@ -1,25 +1,27 @@
 package DeepRecursion;
 use Moose;
-use FindBin;
 
+# ABSTRACT: A StackOverflow Clone in Magpie
+
+use FindBin;
 use KiokuDB;
 use Bread::Board;
 use Plack::Builder;
 use Plack::Middleware::Magpie;
 
-has dsn => (
+has kioku_dsn => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
-has db_user => (
+has kioku_user => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
-has db_pass => (
+has kioku_pass => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
@@ -40,9 +42,9 @@ sub _build_assets {
             block     => sub {
                 my $s = shift;
                 KiokuDB->connect(
-                    $self->dsn,
-                    user     => $self->db_user,
-                    password => $self->db_pass,
+                    $self->kioku_dsn,
+                    user     => $self->kioku_user,
+                    password => $self->kioku_pass,
                     create   => 1,
                     columns  => [],
                 );
@@ -56,7 +58,7 @@ sub app {
     builder {
         enable "Plack::Middleware::Static",
             path => qr{(?:^/(?:images|js|css)/|\.(?:txt|html|xml|ico)$)},
-            root => "$FindBin::Bin/static";
+            root => "$FindBin::Bin/root/static";
         enable "Magpie",
             assets => $self->assets,
             conf   => "$FindBin::Bin/conf/magpie.xml";

@@ -1,9 +1,0 @@
-[% WRAPPER layouts/main.tt2 %]
-<h2>Register</h2>
-<form method="POST" action="[% links.new_question %]" class="login">
-<div class="input" ><label >Title</label><input type="text" name="title" ></div>
-<div class="input"><textarea name="text"></textarea></div>
-<div class="input" ><input type="submit" name="Post Your Question" ></div>
-<input type="hidden" name="next_resource" value="[% links.next %]">
-</form>
-[% END %]

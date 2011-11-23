@@ -7,7 +7,7 @@ use lib 'lib';
 use DeepRecursion;
 
 DeepRecursion->new(
-    db_user => 'deep_recursion',
-    db_pass => 'deep_recursion',
-    dsn     => 'dbi:SQlite:deep_recursion.db',
+    kioku_user => 'deep_recursion',
+    kioku_pass => 'deep_recursion',
+    kioku_dsn  => 'dbi:SQLite:site.db',
 )->app;

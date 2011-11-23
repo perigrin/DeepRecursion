@@ -1,5 +1,5 @@
 [% WRAPPER layouts/main.tt2 %]
-
+[% question = resource.data %]
 [% USE Markdown -%]
 <article class="question">
     <div class="votes count"><p>[% question.votes_count %]</p><label>Votes</label></div>
@@ -9,14 +9,14 @@
 </article>
 <div class="answers">
 <h2>[% question.answers_count %] Answers</h2>
-[% for answer in question.answers %]
+[% FOR answer IN question.answers %]
 <article class="answer">
     <div class="votes count"><p>[% answer.votes_count %]</p><label>Votes</label></div>
     <div class="text">[% FILTER markdown %][% answer.text %][%END%]</div>
     <p>Posted by [% answer.author.id %] on [% answer.timestamp %].</p>    
 </article>
-[% end %]
-[% if session.user %]
+[% END %]
+[% IF session.user %]
 <div class="add answer" style="border-top: 1px solid silver;">
     <p>Add another answer.</p>
     <form method="POST" action="[% links.new_answer %]" class="login">
@@ -24,7 +24,7 @@
         <div class="input" ><input type="submit" name="Post Your Answer" ></div>
     </form>
 </div>    
-[% end %]
+[% END %]
 </div>
 
 [% END %]
