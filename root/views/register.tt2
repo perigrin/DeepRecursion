@@ -1,7 +1,7 @@
 [% WRAPPER layouts/main.tt2 %]
 
 <h2>Register</h2>
-<form method="POST" action="/user" class="login">
+<form method="POST" action="/users" class="login">
 <div class="input" ><label >Username</label><input type="text" name="username" ></div>
 <div class="input" ><label >Password</label><input type="password" name="password" ></div>
 <div class="input" ><label >Confirm Password</label><input type="password" name="confirm" ></div>
