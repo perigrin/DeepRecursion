@@ -8,10 +8,10 @@
         <match type="regexp" rule="^/(?:login|session)">
             <add class="DeepRecursion::Resource::Session"/>
         </match>
-        <match type="regexp" rule="^/user">
+        <match type="regexp" rule="^/users">
             <add class="DeepRecursion::Resource::User"/>
         </match>
-        <match type="regexp" rule="^/question">
+        <match type="regexp" rule="^/questions">
             <add class="DeepRecursion::Resource::Questions"/>
         </match>
         <match type="regexp" rule="^/(?!question|user|login).*">

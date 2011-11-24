@@ -12,14 +12,22 @@ use DeepRecursion;
 my $app = DeepRecursion->new(
     kioku_user => '',
     kioku_pass => '',
-    kioku_dsn  => 'dbi:SQLite:site.db',
+    kioku_dsn  => 'dbi:SQLite::memory:',
 )->app;
+
+my %user = (
+    username => 'perigrin',
+    password => 'password',
+);
 
 test_psgi $app => sub {
     my $cb = shift;
 
+    # Create the User
+    my $res = $cb->( POST '/users', [%user] );
+
     # Check Login Form
-    my $res = $cb->( GET '/login', Accept => 'text/html' );
+    $res = $cb->( GET '/login', Accept => 'text/html' );
     for ( $res->content ) {
         like $_, qr|<h1><a href="/">DeepRecursion</a></h1>|,
             '/login has a DeepRecursion header';
@@ -34,10 +42,7 @@ test_psgi $app => sub {
     }
 
     # Create Session
-    $res = $cb->(
-        POST '/login',
-        [ username => 'perigrin', password => 'pippin' ]
-    );
+    $res = $cb->( POST '/login', [%user] );
     is $res->code, '303', 'got the expected code (303)';
     like $res->header('Location'), qr|/session/[\w]+|,
         'response location looks correct';
@@ -59,7 +64,7 @@ test_psgi $app => sub {
             "$location has DeepRecursion header";
         like $_, qr|\Q<li><a href="/login?logout=1">Logout</a></li>\E|,
             '...and a logout link';
-        like $_, qr|<h2>Hey there perigrin!</h2>|, '...and the greeting';
+        like $_, qr|<h2>Hey there $user{username}!</h2>|, '...and the greeting';
         like $_, qr|<a href="/new_question">ask a question</a>|,
             '...and a link to ask a question';
     }
