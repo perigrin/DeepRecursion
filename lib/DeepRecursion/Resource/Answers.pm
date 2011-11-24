@@ -1,4 +1,4 @@
-package DeepRecursion::Resource::Questions;
+package DeepRecursion::Resource::Answers;
 use Moose;
 extends "Magpie::Resource::Kioku";
 
@@ -6,7 +6,7 @@ use Magpie::Constants;
 use Try::Tiny;
 use Plack::Session;
 
-has '+wrapper_class' => ( default => 'DeepRecursion::Model::Question', );
+has '+wrapper_class' => ( default => 'DeepRecursion::Model::Answer', );
 
 sub POST {
     my $self = shift;
@@ -37,6 +37,8 @@ sub POST {
         return DONE;
     }
 
+    my ($question_id) = ( split '/', $req->path_info )[-2];
+
     try {
         Class::MOP::load_class($wrapper_class);
         $to_store = $wrapper_class->new(
@@ -52,9 +54,12 @@ sub POST {
     };
 
     return DECLINED if $self->has_error;
-
+        
     try {
         $id = $self->data_source->store($to_store);
+        my $question = $self->data_source->lookup($question_id);
+        $question->add_answer($to_store);
+        $self->data_source->store($question);
     }
     catch {
         my $error = "Could not store POST data in Kioku data source: $_\n";
@@ -66,7 +71,7 @@ sub POST {
 
     $self->state('created');
     $self->response->status(303);
-    $self->response->header( 'Location' => "/questions/$id" );
+    $self->response->header( 'Location' => "/questions/$question_id" );
     return OK;
 }
 

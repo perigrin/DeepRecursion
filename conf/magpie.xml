@@ -11,16 +11,17 @@
         <match type="regexp" rule="^/users">
             <add class="DeepRecursion::Resource::User"/>
         </match>
-        <match type="regexp" rule="^/questions">
-            <add class="DeepRecursion::Resource::Questions">
-            </add>
+        <match type="regexp" rule="^/questions/(?:\w+)/answers">
+            <add class="DeepRecursion::Resource::Answers"/>
+        </match>
+        <match type="regexp" rule="^/questions(?:/\w+/?)?$">
+            <add class="DeepRecursion::Resource::Questions"/>
         </match>
         <match type="regexp" rule="^/(?!question|user|login).*">
             <add class="Magpie::Resource::Abstract"/>
         </match>
         <match type="accept" variant_name="json">
-            <add class="DeepRecursion::Transformer::JSON">
-            </add>
+            <add class="DeepRecursion::Transformer::JSON"/>
         </match>
         <match type="accept" variant_name="html">
             <add class="DeepRecursion::Transformer::TT2">

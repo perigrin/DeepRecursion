@@ -2,9 +2,6 @@ package DeepRecursion::Model::Question;
 use Moose;
 use Digest::SHA qw(sha1_hex);
 use DateTime;
-use MooseX::Storage;
-
-with Storage();
 
 with qw(KiokuDB::Role::ID);
 

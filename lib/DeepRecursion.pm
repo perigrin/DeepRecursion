@@ -9,7 +9,6 @@ use Bread::Board;
 use Plack::Builder;
 use Plack::Middleware::Magpie;
 use Plack::Session::Store::Cache;
-use CHI;
 
 has [qw(kioku_dsn kioku_user kioku_pass)] => (
     is       => 'ro',
@@ -46,9 +45,7 @@ sub _build_assets {
 sub app {
     my $self = shift;
     builder {
-        enable "Session", Plack::Session::Store::Cache->new(
-            cache => CHI->new( driver => 'FastMmap', )    #
-        );
+        enable 'Session';
         enable "Static",
             path => qr{(?:^/(?:images|js|css)/|\.(?:txt|html|xml|ico)$)},
             root => 'root/static';
