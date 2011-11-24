@@ -5,7 +5,7 @@
         <variant name="html" type="text/html"/>
     </accept_matrix>
     <pipeline>
-        <match type="regexp" rule="^/login">
+        <match type="regexp" rule="^/(?:login|session)">
             <add class="DeepRecursion::Resource::Session"/>
         </match>
         <match type="regexp" rule="^/user">
