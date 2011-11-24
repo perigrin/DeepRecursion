@@ -1,0 +1,10 @@
+[% WRAPPER layouts/main.tt2 %]
+[% question = resource.data %]
+
+<h2>Edit [% question.title %]</h2>
+<form method="POST" action="/question" class="login">
+    <div class="input" ><label >Title</label><input type="text" name="title" >[% question.title %]</div>
+    <div class="input"><textarea name="text">[% question.text %]</textarea></div>
+    <div class="input" ><input type="submit" name="Update the Question" ></div>
+</form>
+[% END %]
