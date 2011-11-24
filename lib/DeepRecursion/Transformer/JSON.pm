@@ -25,7 +25,8 @@ sub transform {
             $json_string = '[' . ( join ', ', @objects ) . ']';
         }
         else {
-            $json_string = JSON::Any->encode($data // {});
+            $json_string
+                = JSON::Any->new( allow_blessed => 1 )->encode( $data );
         }
         $self->response->content_type('application/json');
         $self->response->content_length( length($json_string) );

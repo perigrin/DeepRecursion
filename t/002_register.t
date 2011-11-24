@@ -23,7 +23,7 @@ test_psgi $app => sub {
         like $_, qr|<h1><a href="/">DeepRecursion</a></h1>|;
         like $_, qr|<a href="/login">Login</a>|;
         like $_, qr|<a href="/register">Register</a>|;
-        like $_, qr|<form method="POST" action="/user" class="login">|;
+        like $_, qr|<form method="POST" action="/users" class="login">|;
         like $_,
             qr|<div class="input" ><label >Username</label><input type="text" name="username" ></div>|;
         like $_,

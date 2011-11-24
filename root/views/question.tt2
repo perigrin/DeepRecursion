@@ -1,5 +1,6 @@
 [% WRAPPER layouts/main.tt2 %]
 [% question = resource.data %]
+[% user = session.get('user') %]
 [% USE Markdown -%]
 <article class="question">
     <div class="votes count"><p>[% question.votes_count %]</p><label>Votes</label></div>
@@ -16,7 +17,7 @@
     <p>Posted by [% answer.author.id %] on [% answer.timestamp %].</p>    
 </article>
 [% END %]
-[% IF session.user %]
+[% IF user %]
 <div class="add answer" style="border-top: 1px solid silver;">
     <p>Add another answer.</p>
     <form method="POST" action="[% links.new_answer %]" class="login">

@@ -2,6 +2,10 @@ package DeepRecursion::Model::Question;
 use Moose;
 use Digest::SHA qw(sha1_hex);
 use DateTime;
+use MooseX::Storage;
+
+with Storage();
+
 with qw(KiokuDB::Role::ID);
 
 sub kiokudb_object_id { shift->id }
@@ -13,16 +17,10 @@ has id => (
     default => sub { sha1_hex( $_[0]->title . $_[0]->text ) }
 );
 
-has title => (
+has [qw(title text)] => (
     isa      => 'Str',
     is       => 'ro',
     required => 1
-);
-
-has text => (
-    isa      => 'Str',
-    is       => 'ro',
-    required => 1,
 );
 
 has author => (

@@ -12,7 +12,8 @@
             <add class="DeepRecursion::Resource::User"/>
         </match>
         <match type="regexp" rule="^/questions">
-            <add class="DeepRecursion::Resource::Questions"/>
+            <add class="DeepRecursion::Resource::Questions">
+            </add>
         </match>
         <match type="regexp" rule="^/(?!question|user|login).*">
             <add class="Magpie::Resource::Abstract"/>
