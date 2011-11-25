@@ -1,6 +1,21 @@
 package DeepRecursion::Resource::Session;
 use Moose;
 extends qw(Magpie::Resource::Session);
+use Magpie::Constants;
+
+
+around POST => sub {
+    my ( $next, $self ) = ( shift, shift );
+
+    my $return = $self->$next(@_);
+    return $return unless $return == DONE;
+
+    my $id = $self->session->id;
+    $self->response->status(303);
+    $self->response->header(
+        'Location' => $self->request->base . "sessions/$id" );
+    return DONE;
+};
 
 1;
 __END__

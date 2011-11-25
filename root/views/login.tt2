@@ -5,7 +5,7 @@
 <p><a href="/login?logout=1">Click here to logout</a></p>
 [% ELSE %]
 <h2>Login</h2>
-<form method="POST" action="/login" form="login">
+<form method="POST" action="/sessions" form="login">
 <div class="input"><label>Username</label><input type="text" name="username"></div>
 <div class="input"><label>Password</label><input type="password" name="password"></div>
 <div class="input"><input type="submit" name="go"></div>

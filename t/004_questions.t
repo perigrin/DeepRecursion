@@ -37,13 +37,13 @@ test_psgi $app => sub {
 
     # Create the User and Login
     $res = $cb->( POST '/users', [%user] );
-    $res = $cb->( POST '/login', [%user] );
+    $res = $cb->( POST '/sessions', [%user] );
     my $cookie = $res->header('Set-Cookie');
 
     ok $res = $cb->( POST '/questions', [%question], Cookie => $cookie, ),
         'posted a question';
     is $res->code, 303, 'got the expected return code (303)';
-    like $res->header('Location'), qr|^/questions/\w+|,
+    like $res->header('Location'), qr|^http://localhost/questions/\w+|,
         '...and the Location header looks right';
 
     my $url = $res->header('Location');

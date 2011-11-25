@@ -2,6 +2,7 @@ package DeepRecursion::Model::Answer;
 use Moose;
 use Digest::SHA qw(sha1_hex);
 use DateTime;
+
 has id => (
     isa     => 'Str',
     is      => 'ro',

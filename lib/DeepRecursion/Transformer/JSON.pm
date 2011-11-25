@@ -11,7 +11,9 @@ sub load_queue { return qw(transform) }
 
 sub transform {
     my $self = shift;
-    my $ctxt = shift;
+    
+    return DECLINED if $self->resource->isa('Magpie::Resource::Abstract');
+    
     if ( $self->resource->has_data ) {
         my $data        = $self->resource->data;
         my $json_string = undef;
@@ -26,7 +28,7 @@ sub transform {
         }
         else {
             $json_string
-                = JSON::Any->new( allow_blessed => 1 )->encode( $data );
+                = JSON::Any->new( allow_blessed => 1 )->encode($data);
         }
         $self->response->content_type('application/json');
         $self->response->content_length( length($json_string) );

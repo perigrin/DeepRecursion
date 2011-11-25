@@ -42,29 +42,28 @@ test_psgi $app => sub {
     }
 
     # Create Session
-    $res = $cb->( POST '/login', [%user] );
+    $res = $cb->( POST '/sessions', [%user] );
     is $res->code, '303', 'got the expected code (303)';
-    like $res->header('Location'), qr|/session/[\w]+|,
+    like $res->header('Location'), qr|/sessions/\w+|,
         'response location looks correct';
 
     # Get the Session Resource
     my $location = $res->header('Location');
     my $cookie   = $res->header('Set-Cookie');
     $res = $cb->( GET $location, Cookie => $cookie );
-    is $res->code, 302, 'got the expected code (302)';
-    like $res->header('Location'), qr|/|, 'response location looks correct';
+    is $res->code, 200, 'got the expected code (200)';
 
-    # Get the new location
-    $location = $res->header('Location');
-    $cookie   = $res->header('Set-Cookie');
-    $res = $cb->( GET $location, Cookie => $cookie, Accept => 'text/html' );
+    # Get the index
+    $cookie = $res->header('Set-Cookie');
+    $res = $cb->( GET '/', Cookie => $cookie, Accept => 'text/html' );
     is $res->code, 200, 'got the expected code (200)';
     for ( $res->content ) {
         like $_, qr|<h1><a href="/">DeepRecursion</a></h1>|,
             "$location has DeepRecursion header";
         like $_, qr|\Q<li><a href="/login?logout=1">Logout</a></li>\E|,
             '...and a logout link';
-        like $_, qr|<h2>Hey there $user{username}!</h2>|, '...and the greeting';
+        like $_, qr|<h2>Hey there $user{username}!</h2>|,
+            '...and the greeting';
         like $_, qr|<a href="/new_question">ask a question</a>|,
             '...and a link to ask a question';
     }

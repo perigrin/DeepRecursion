@@ -43,7 +43,6 @@ sub POST {
         Class::MOP::load_class($wrapper_class);
         $to_store = $wrapper_class->new(
             author => $user,
-            title  => $args{title},
             text   => $args{text},
         );
     }
@@ -71,7 +70,7 @@ sub POST {
 
     $self->state('created');
     $self->response->status(303);
-    $self->response->header( 'Location' => "/questions/$question_id" );
+    $self->response->header( 'Location' => $req->base . "questions/$question_id" );
     return OK;
 }
 

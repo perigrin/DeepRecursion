@@ -46,7 +46,7 @@ test_psgi $app => sub {
 
     # Create the User and Login
     $res = $cb->( POST '/users', [%user] );
-    $res = $cb->( POST '/login', [%user] );
+    $res = $cb->( POST '/sessions', [%user] );
     my $cookie = $res->header('Set-Cookie');
 
     # Create the question
