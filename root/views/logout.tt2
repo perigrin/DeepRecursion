@@ -1,0 +1,12 @@
+[% WRAPPER layouts/main.tt2 %]
+[% user = session.get('user') %]
+[% UNLESS user %]
+<h2>You seem to already be logged out!</h2>
+<p><a href="/">Click here to return to the main page</a></p>
+[% ELSE %]
+<h2>Logout</h2>
+<form method="POST" action="/sessions/[% session.id %]?x-tunneled-method=DELETE" form="login">
+<div class="input"><input type="submit" name="Logout"></div>
+</form>
+[% END %]
+[% END %]

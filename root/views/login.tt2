@@ -2,7 +2,7 @@
 [% user = session.get('user') %]
 [% IF user %]
 <h2>[% user.id %] you seem to already be logged in!</h2>
-<p><a href="/login?logout=1">Click here to logout</a></p>
+<p><a href="/logout">Click here to logout</a></p>
 [% ELSE %]
 <h2>Login</h2>
 <form method="POST" action="/sessions" form="login">
